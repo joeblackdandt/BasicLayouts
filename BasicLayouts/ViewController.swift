@@ -8,26 +8,46 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    @IBOutlet weak var myTextField: UITextField!
-    @IBOutlet weak var myLabel: UILabel!
+class ViewController: UIViewController,UITextFieldDelegate {
+    @IBOutlet weak var txtInput: UITextField!
+    @IBOutlet weak var txtOutput: UITextView!
+    
+    var items:[String] = []
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        //myTextField.delegate = self
     }
 
-    @IBAction func didTapButton(_ sender: Any) {
-        let name = myTextField.text!
+    @IBAction func addItem(_ sender: Any) {
+        //let name = txtInput.text!
         
-        myLabel.text = "Hi \(name)!"
+        if (txtInput.text! == ""){
+            return
+        }
         
-        myTextField.resignFirstResponder()
+        items.append(txtInput.text!)
+        
+        //Now we are refreshing the list with all the todos
+        txtOutput.text = ""
+        for item in items {
+            txtOutput.text.append("\(item)\n")
+        }
+        
+        //clean the input
+        txtInput.text = ""
+        txtInput.resignFirstResponder()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        addItem(self)
+        return false
     }
     
     override func didReceiveMemoryWarning() {
